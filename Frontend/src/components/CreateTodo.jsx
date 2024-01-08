@@ -14,7 +14,7 @@ export function CreateTodo({showModal, setShowModal, setRefreshKey}) {
 
     return <Modal show={showModal} onHide={handleClose}>
     <Modal.Header closeButton>
-      <Modal.Title>Modal Form</Modal.Title>
+      <Modal.Title>Add new ToDo</Modal.Title>
     </Modal.Header>
     <Modal.Body>
     <div>
