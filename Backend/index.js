@@ -7,7 +7,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.post("/todo", async function(req,res){
+app.post("/todos", async function(req,res){
     const createPayLoad = req.body;
     const parsePayLoad = createTodo.safeParse(createPayLoad);
     if(!parsePayLoad.success){
@@ -17,7 +17,7 @@ app.post("/todo", async function(req,res){
         return;
     }
     //save to DB
-    await todo.Create({
+    await todo.create({
         title: createPayLoad.title,
         description: createPayLoad.description
     });
@@ -27,11 +27,11 @@ app.post("/todo", async function(req,res){
     })
 });
 
-app.get("/todo", async function(req,res){
-    const todos = await todo.find();
+app.get("/todos", async function(req,res){
+    const todos = await todo.find({});
 
     res.json({
-        todos
+        todos: todos
     })
 });
 
@@ -45,7 +45,7 @@ app.put("/completed", async function(req,res){
         return;
     }
 
-    await todo.update({
+    await todo.updateOne({
         _id: req.body.id
     }, {
         completed: true
@@ -55,3 +55,5 @@ app.put("/completed", async function(req,res){
         msg: "todo marked completed."
     })
 });
+
+app.listen(3000);

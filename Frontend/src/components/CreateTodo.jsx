@@ -1,16 +1,28 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import { useState } from "react";
+import { Modal } from 'react-bootstrap';
 
-// eslint-disable-next-line no-unused-vars
-export function CreateTodo(props) {
-    // react-query
+export function CreateTodo({showModal, setShowModal, setRefreshKey}) {
+
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+    
+    const handleClose = ()=>{
+        setShowModal(false);
+    }
 
-    return <div>
+    return <Modal show={showModal} onHide={handleClose}>
+    <Modal.Header closeButton>
+      <Modal.Title>Modal Form</Modal.Title>
+    </Modal.Header>
+    <Modal.Body>
+    <div>
         <input id="title" style={{
             padding: 10,
             margin: 10
         }} type="text" placeholder="title" onChange={function(e) {
+            const value = e.target.value;
             setTitle(e.target.value);
         }}></input> <br />
     
@@ -18,15 +30,13 @@ export function CreateTodo(props) {
             padding: 10,
             margin: 10
         }} type="text" placeholder="description" onChange={function(e) {
+            const value = e.target.value;
             setDescription(e.target.value);
         }}></input> <br />
 
-        <button style={{
-            padding: 10,
-            margin: 10
-        }} onClick={() => {
+        <button className="btn btn-success" onClick={() => {
             // axios
-            fetch("http://localhost:3000/todo", {
+            fetch("http://localhost:3000/todos", {
                 method: "POST",
                 body: JSON.stringify({
                     title: title,
@@ -37,9 +47,13 @@ export function CreateTodo(props) {
                 }
             })
                 .then(async function(res) {
-                    await res.json();
+                    const json = await res.json();
                     alert("Todo added");
+                    setShowModal(false);
+                    setRefreshKey(oldkey => oldkey+1);
                 })
         }}>Add a todo</button>
     </div>
+    </Modal.Body>
+  </Modal>
 }

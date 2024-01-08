@@ -1,17 +1,27 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
+// eslint-disable-next-line no-unused-vars
 import { CreateTodo } from './components/CreateTodo'
 import { Todos } from './components/Todos'
 
-// useEffect hook
 function App() {
-  // eslint-disable-next-line no-unused-vars
   const [todos, setTodos] = useState([]);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  useEffect(()=>{
+    const getTodos = ()=>{
+      fetch("http://localhost:3000/todos")
+        .then(async function(res) {
+          const json = await res.json();
+          setTodos(json.todos);
+        })
+    }
+    getTodos();
+  },[refreshKey]);
 
   return (
-    <div>
-      <CreateTodo></CreateTodo>
-      <Todos todos={todos}></Todos>
+    <div className='d-flex align-items-center m-5 justify-content-center'>
+      <Todos todos={todos} setRefreshKey={setRefreshKey}></Todos>
     </div>
   )
 }
