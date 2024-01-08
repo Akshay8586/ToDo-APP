@@ -15,13 +15,14 @@ export function Todos({todos, setRefreshKey}) {
     const [showModal, setShowModal] = useState(false);
 
 
-    const toggleTask = async(id) =>{
+    const toggleTask = async(id, completed) =>{
         let taskNumber = id.split('-')[1];
         console.log("task id captured>", taskNumber);
         const requestOptions = {
             method: 'PUT',
             body: JSON.stringify({
-                id: taskNumber
+                id: taskNumber,
+                completed: !completed
             }),
             headers: {"Content-Type": "application/json"},
         }
@@ -40,7 +41,7 @@ export function Todos({todos, setRefreshKey}) {
                 <input
                 className="form-check-input float-none m-3"
                 type="checkbox"
-                onChange={() => toggleTask(`task-${todo._id}`) }
+                onChange={() => toggleTask(`task-${todo._id}`,todo.completed) }
                 id={`task-${todo._id}`}
                 checked={todo.completed}
                 />
